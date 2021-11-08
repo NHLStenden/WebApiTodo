@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,7 +12,7 @@ namespace WebApiTodo.Models
         public bool Completed { get; set; }
         
         [DataType(DataType.Date)]
-        public DataType DueDate { get; set; }
+        public DateTime DueDate { get; set; }
 
         public int CategoryId { get; set; }
         public Category Category { get; set; }

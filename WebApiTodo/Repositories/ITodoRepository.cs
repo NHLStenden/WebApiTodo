@@ -2,7 +2,7 @@ using WebApiTodo.Models;
 
 namespace WebApiTodo.Repositories
 {
-    public interface ICategoryRepository : IGenericRepository<Category>
+    public interface ITodoRepository : IGenericRepository<Todo>
     {
     }
 }

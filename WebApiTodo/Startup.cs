@@ -35,6 +35,7 @@ namespace WebApiTodo
             });
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ITodoRepository, TodoRepository>();
             
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -78,7 +79,22 @@ namespace WebApiTodo
                 {
                     Name = $"Category {i}"
                 };
-                db.Categories.Add(category);
+                //db.Categories.Add(category);
+
+                var now = DateTime.Now;
+                foreach (var todoIndex in Enumerable.Range(1,5))
+                {
+                    var todo = new Todo()
+                    {
+                        Description = $"Todo {todoIndex}, Category: {category.Name}",
+                        Completed = todoIndex % 2 == 0,
+                        Category = category,
+                        DueDate = now
+                    };
+
+                    db.Todos.Add(todo);
+                    now = now.AddDays(1);
+                }
             }
 
             db.SaveChanges();

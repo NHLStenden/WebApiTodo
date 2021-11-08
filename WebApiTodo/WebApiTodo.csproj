@@ -17,6 +17,9 @@
       <Compile Update="Repositories\CategoryRepository.cs">
         <DependentUpon>ICategoryRepository.cs</DependentUpon>
       </Compile>
+      <Compile Update="Repositories\TodoRepository.cs">
+        <DependentUpon>ITodoRepository.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>
