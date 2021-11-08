@@ -10,4 +10,13 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Repositories\GenericGenericRepository.cs">
+        <DependentUpon>IRepository.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Repositories\CategoryRepository.cs">
+        <DependentUpon>ICategoryRepository.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

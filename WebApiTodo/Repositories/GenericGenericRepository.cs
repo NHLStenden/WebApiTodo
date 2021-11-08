@@ -5,7 +5,7 @@ using WebApiTodo.Models;
 
 namespace WebApiTodo.Repositories
 {
-    public class GenericRepository<T> : IRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected readonly DbContext Db;
 

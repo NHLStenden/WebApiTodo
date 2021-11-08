@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace WebApiTodo.Repositories
 {
-    public interface IRepository<T>
+    public interface IGenericRepository<T>
     {
         public List<T> Get();
         public T Get(int id);
