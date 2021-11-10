@@ -29,6 +29,11 @@ namespace WebApiTodo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc()
+                .AddXmlDataContractSerializerFormatters();
+            
+            
+            
             services.AddDbContext<TodoContext>(builder =>
             {
                 builder.UseMySQL("Server=localhost;Database=WebApiTodo;Uid=root;Pwd=Test@1234!;");
@@ -47,13 +52,13 @@ namespace WebApiTodo
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, TodoContext db)
         {
-            db.Database.EnsureDeleted();
-            db.Database.EnsureCreated();
-
-            DatabaseSeeder.Seed(db);
-            
             if (env.IsDevelopment())
             {
+                db.Database.EnsureDeleted();
+                db.Database.EnsureCreated();
+
+                DatabaseSeeder.Seed(db);
+                
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApiTodo v1"));
