@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using WebApiTodo.Middleware;
 using WebApiTodo.Models;
 using WebApiTodo.Repositories;
 
@@ -53,43 +54,8 @@ namespace WebApiTodo
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, TodoContext db)
         {
-            app.Use(async (context, next) =>
-            {
-                string path = context.Request.Path.Value;
-                if (path.StartsWith("/"))
-                {
-                    path = path.Substring(1);
-                }
-                
-                var staticFilePath = Path.Combine(env.ContentRootPath, "wwwroot", path);
-                
-                if (File.Exists(staticFilePath))
-                {
-                    var extension = new FileInfo(staticFilePath).Extension;
-
-                    //https://en.wikipedia.org/wiki/Media_type
-                    string mediaType = extension switch
-                    {
-                        ".jpeg" => "image/jpeg",
-                        ".jpg" => "image/jpeg",
-                        ".html" => "text/html",
-                        _ => throw new NotImplementedException($"mediaType for extension: {extension} not supported")
-                    };
-                    context.Response.Headers.Add("content-type", mediaType);
-
-                    await using (var stream = File.OpenRead(staticFilePath))
-                    {
-                        await stream.CopyToAsync(context.Response.Body);    
-                    }
-                    
-                    await context.Response.CompleteAsync();
-                    // context.Response.Body.WriteAsync()
-                }
-                else
-                {
-                    await next.Invoke();
-                }
-            });
+            app.UseMyStaticFileMiddleware();
+            //app.UseStaticFiles(); implemented by Microsoft
             
             if (env.IsDevelopment())
             {
