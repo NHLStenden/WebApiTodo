@@ -38,17 +38,28 @@ namespace WebApiTodo.Repositories
 
         public T Update(T entity)
         {
-            Db.Set<T>().Update(entity);
-            Db.SaveChanges();
+            // if (Db.Set<T>().Find(id) is T foundEntity)
+            // {
+                Db.Set<T>().Update(entity);
+                Db.SaveChanges();
+            //     return todo;
+            // }
+            
+            
+            
             return entity;
         }
 
-        public bool Delete(int id)
+        public T Delete(int id)
         {
-            T entityToRemove = Db.Find<T>(id);
-            Db.Set<T>().Remove(entityToRemove);
-            var numOfEffectedRows = Db.SaveChanges();
-            return numOfEffectedRows > 0;
+            if (Db.Find<T>(id) is T todo)
+            {
+                Db.Set<T>().Remove(todo);
+                Db.SaveChanges();
+                return todo;
+            }
+
+            return null;
         }
     }
 }

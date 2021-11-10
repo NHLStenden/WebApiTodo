@@ -23,26 +23,62 @@ namespace WebApiTodo.Controllers
             return categories;
         }
 
-        [HttpGet]
-        [Route("{id:int}")]
-        public Category Get(int id)
+        [HttpGet("{id:int}")]
+        //[Route("{id:int}")]
+        public ActionResult<Category> Get(int id)
         {
             var category = _categoryRepository.Get(id);
-            return category;
+            if (category is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(category);
         }
 
         [HttpPost]
-        public Category Post(Category category)
+        public ActionResult<Category> Create(Category category)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var addedCategory = _categoryRepository.Add(category);
-            return addedCategory;
+            return CreatedAtAction(nameof(Get), new {id = addedCategory.Id}, addedCategory);
+        }
+
+        [HttpPut("{categoryId:int}")]
+        public IActionResult Put(int categoryId, Category input)
+        {
+            if (categoryId != input.Id)
+                return BadRequest();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // Category category = _categoryRepository.Get(categoryId);
+            // if (category is null)
+            // {
+            //     return NotFound();
+            // }
+
+            Category updatedCategory = _categoryRepository.Update(input);
+
+            return updatedCategory is not null ? Ok(updatedCategory) : BadRequest();
         }
 
         [HttpDelete]
-        public bool Delete(int categoryId)
+        public IActionResult Delete(int categoryId)
         {
-            bool delete = _categoryRepository.Delete(categoryId);
-            return delete;
+            var category = _categoryRepository.Get(categoryId); //dubbel werk, zie ook Delete()
+            if (category is null)
+            {
+                return NotFound();
+            }
+
+            var removedCategory = _categoryRepository.Delete(categoryId);
+            return removedCategory is not null ? Ok() : BadRequest();
         }
     }
 }
